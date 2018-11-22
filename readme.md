@@ -1,11 +1,11 @@
 ﻿# qBlog
 #### 特色
-- 通过关键词(任意关键词)改变界面风格<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%" align=center>
-#### 其他部分展示<br>
-- 日志列表：<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg" width="50%" align=center>
-- 评论：<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg" width="50%" align=center>
-- 后台：<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg" width="70%" align=center>
-#### 相关技术<br>
+- 通过关键词(任意关键词)改变界面风格<br><img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%" align=center>
+#### 其他部分展示
+- 日志列表：<br><img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg" width="50%" align=center>
+- 评论：<br><img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg" width="50%" align=center>
+- 后台：<br><img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg" width="70%" align=center>
+#### 相关技术
 - 本项目主要使用springboot、mybatis、bootstrap开发框架，数据库为Mysql
 #### 参考
 - [Java简单实现：爬取网页并且保存](http://www.cnblogs.com/ywl925/p/3270875.html)
