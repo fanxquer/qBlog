@@ -1,7 +1,9 @@
 ﻿# qBlog
 - 特色
 通过关键词(任意关键词)改变界面风格
-![](https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg)
+<center>
+	<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%">
+</center>
 - 其他部分展示<br>
 　　日志列表：<br>
 ![日志列表](https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg)
