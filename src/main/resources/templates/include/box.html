@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<!--用户信息栏-->
+<footer th:fragment="userInfo">
+    <style>
+        #info {
+            width: 270px;
+            background: ghostwhite;
+            margin-bottom: 20px;
+            border: 1px navajowhite dashed;
+            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1);
+        }
+        #img {
+            width: 100px;
+            margin-left: calc(50% - 50px);
+            margin-top: 20px;
+        }
+        #name {
+            text-align: center;
+            line-height: 60px;
+            font-size: 30px;
+            width: 160px;
+            margin: 5px 54px;
+            border-bottom: 1px #95958a dashed;
+        }
+    </style>
+    <div class="grid" id="info">
+        <div id="img">
+            <img src="/images/head-image.jpg" class="img-circle" width="100px">
+        </div>
+        <div id="name">fanxquer</div>
+    </div>
+</footer>
+
+<!--文章分类栏-->
+<footer th:fragment="category(categories)">
+    <style>
+        .grid {
+            width: 270px;
+            background: ghostwhite;
+            margin-bottom: 20px;
+            border: 1px navajowhite dashed;
+            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1);
+        }
+        #category-title {
+            background: #f5f5f5;
+            width: 268px;
+            height: 40px;
+            font-size: 13px;
+            line-height: 40px;
+            text-align: center;
+        }
+        #category-body {
+            background: ghostwhite;
+            width: 268px;
+            padding: 15px 0px;
+        }
+        .category-item {
+            width: 230px;
+            height: 30px;
+            margin: 0px 20px;
+            line-height: 30px;
+        }
+        .category-href {
+            color: #9d9d9d;
+        }
+        .category-href:hover {
+            font-weight: bold;
+            color: #38b7ea;
+        }
+    </style>
+    <div class="grid" id="category">
+        <div id="category-title">
+            类别
+        </div>
+        <div id="category-body">
+                <div th:each="category: ${categories}" class="category-item" >
+                    <a th:href="@{/articleByCategory(category=${category.id})}" th:text="${category.name}" class="category-href"></a><span th:text="${category.count}" class="badge" style="float: right;"></span>
+                </div>
+        </div>
+    </div>
+</footer>
+
+<footer th:fragment="setStyle">
+    <style>
+        #set-style {
+            width: 270px;
+            background: ghostwhite;
+            margin-bottom: 20px;
+            border: 1px navajowhite dashed;
+            box-shadow: 0px 3px 3px rgba(0, 0, 0, 0.1);
+        }
+        #style-title {
+            background: #f5f5f5;
+            width: 268px;
+            height: 40px;
+            font-size: 25px;
+            line-height: 40px;
+            text-align: center;
+        }
+        #style-title span {
+            font-weight: bold;
+        }
+        #style-input {
+            margin: 10px 20px;
+        }
+        #style-button {
+            background: #f5f5f5;
+            width: 268px;
+            height: 40px;
+            font-size: 25px;
+            line-height: 45px;
+            text-align: center;
+        }
+        #style-button:hover {
+            background: #c5c5c5;
+        }
+    </style>
+    <div class="gird" id="set-style">
+        <div id="style-title">
+            <span>S</span>
+            <span>t</span>
+            <span>y</span>
+            <span>l</span>
+            <span>e</span>
+        </div>
+        <div id="style-input">
+            <input type="text" class="form-control" name="key" id="submitStyle">
+        </div>
+        <div id="style-button" onclick="submitStyle();">
+                <span class="glyphicon glyphicon-cog"></span>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            setInterval(function () {
+                $('#style-title span').each(function () {
+                    var rgb = getRandomColor();
+                    $(this).animate({
+                        color: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+                    }, 1500);
+                });
+            }, 1500);
+        })
+    </script>
+</footer>
+
+<!--文章-->
+<footer th:fragment="articleInfo(blogArticle)">
+    <style>
+        .article-box {
+            width: 100%;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .article-head {
+            height: 100px;
+            border-left:6px solid darkred;
+            background: orange;
+        }
+        .article-body {
+            height: 400px;
+            background: white;
+        }
+        .article-title {
+            font-weight: bold;
+            font-size: 30px;
+            position: relative;
+            top:20px;
+            left: 10px;
+        }
+        .article-desc {
+            font-size: 14px;
+            position: relative;
+            top:13px;
+            left: 10px;
+        }
+    </style>
+    <div class="article-box">
+        <div class="article-head">
+            <span class="article-title" th:text="${blogArticle.title}"></span><br>
+            <span class="article-desc" th:text="${blogArticle.desc_text}"></span>
+        </div>
+        <div class="article-body">
+            <span class="article-text" th:utext="${blogArticle.desc_text}"></span>
+        </div>
+    </div>
+</footer>
+<footer th:fragment="articleInfo2(blogArticle)">
+    <style>
+        .color-block {
+            border-radius:25px;
+            background: white;
+            width: 300px;
+            height: 300px;
+            border-radius:25px;
+        }
+        .color-block:hover {
+            box-shadow: 0px 6px 10px rgba(0, 0, 0, 0.2);
+        }
+        .article-info {
+            width: 300px;
+            height: 40px;
+            position: relative;
+            margin-bottom: 20px;
+            top: -40px;
+            border-top: 1px solid rgba(0, 0, 0, 0.1);
+        }
+        .article-title {
+            width: 260px;
+            font-weight: bold;
+            font-size: 25px;
+            position: relative;
+            top:30px;
+            left: 20px;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .article-desc {
+            width: 260px;
+            font-size: 14px;
+            position: relative;
+            top:13px;
+            left: 20px;
+        }
+        .date {
+            margin-left: 25px;
+            line-height: 40px;
+        }
+    </style>
+    <div class="color-block" th:onclick="|window.location.href='/showArticle?id=${blogArticle.id}'|">
+        <div class="article-title" th:text="${blogArticle.title}"></div>
+        <div class="article-desc" th:text="${blogArticle.desc_text}"></div>
+    </div>
+    <div class="article-info">
+        <span class="date" th:text="${#dates.format(blogArticle.date_publish,'yyyy-MM-dd')}"></span>
+        <span class="glyphicon glyphicon-eye-open" style="float: right;margin-right: 25px;line-height: 40px" th:text="|  ${blogArticle.click_count}|"></span>
+    </div>
+</footer>
+<footer th:fragment="articleInfo3(blogArticle)">
+    <style>
+        .article-info {
+            height: 130px;
+            width: 793px;
+            border: 1px wheat dashed;
+            border-left: 6px #773300 solid;
+            background: hsla(0,0%,71%,.1);
+            margin-bottom: 20px;
+        }
+        .article-info:hover {
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        }
+        .info-box {
+            height: 110px;
+            width: 763px;
+            margin-top: 10px;
+            margin-left: 20px;
+        }
+        .info-box div {
+            margin-bottom: 5px;
+        }
+        .title {
+            height: 30px;
+        }
+        .text {
+            height: 40px;
+        }
+        .click-info {
+            height: 20px;
+        }
+    </style>
+    <div class="article-info" th:onclick="|window.location.href='/showArticle?id=${blogArticle.id}'|">
+        <div class="info-box">
+            <div class="title"><h3 th:text="${blogArticle.title}"></h3></div>
+            <div class="text" th:text="${blogArticle.desc_text}"></div>
+            <div class="click-info">　
+                <span th:text="${#dates.format(blogArticle.date_publish,'yyyy-MM-dd HH:mm:ss')}"></span>
+                <span class="glyphicon glyphicon-eye-open" style="margin-left: 20px" th:text="| ${blogArticle.click_count}|"></span>
+            </div>
+        </div>
+    </div>
+</footer>
+<footer th:fragment="bottomInfo">
+    <style>
+        #bottom-info {
+            width: 100%;
+            height: 150px;
+            background: white;
+            margin-bottom: 0px;
+            margin-top: 10px;
+            float: left;
+        }
+    </style>
+    <div id="bottom-info"></div>
+</footer>
+
+<footer th:fragment="searchResult(result)">
+    <style>
+        .result-div {
+            margin-bottom: 20px;
+        }
+        .nav-href {
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+        .text-part {
+            font-size: 14px;
+            margin-left: 20px;
+        }
+    </style>
+    <div class="result-div">
+        <div class="nav-href">
+            <span class="glyphicon glyphicon-list-alt info" style="font-size: 20px"></span>
+            <a th:href="@{/listArtivle}">网路日志</a>->
+            <a th:href="@{/listArtivle}">
+                <span th:text="${result.categoryName}"></span>
+            </a>->
+            <a th:href="@{|/showArticle?id=${result.articleId}|}">
+                <span th:text="${result.articleTitle}"></span>
+            </a>
+        </div>
+        <div class="text-part">
+            ...<span th:text="${result.textPart}" class="result-text"></span>...
+            <span th:text="${result.key}" hidden="hidden" id="searchKey"></span>
+        </div>
+    </div>
+</footer>
+<footer th:fragment="noResult(key)">
+    <style>
+        #noResult {
+            width: 300px;
+            position: relative;
+            left: calc(50% - 150px);
+            margin-top: 50px;
+            font-size: 18px;
+        }
+    </style>
+    <div id="noResult">
+        没有搜索到相关文章，您可以尝试：<br>
+        <a th:href="@{|http://www.baidu.com/s?wd=${key}|}">
+            <span th:text="|在百度上搜索'${key}'|"></span>
+        </a><br>
+        <a th:href="@{|http://www.google.cn/search?q=${key}|}">
+            <span th:text="|在google上搜索'${key}'|"></span>
+        </a>
+    </div>
+</footer>
+</body>
+</html>

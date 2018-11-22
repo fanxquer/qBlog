@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanxquer.qblog.dao.BlogCommetMapper">
+    <!-- 接口具体实现-->
+    <select id="getAll" resultType="BlogComment">
+        select * from blog_comment order by date_publish desc
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="BlogComment">
+        select * from blog_comment where id=#{id}
+    </select>
+
+    <select id="getByPid" parameterType="java.lang.Integer" resultType="BlogComment">
+        select * from blog_comment where pid=#{pid}
+    </select>
+
+    <select id="getByArticleId" parameterType="java.lang.Integer" resultType="BlogComment">
+        select * from blog_comment where article_id=#{article_id} order by date_publish desc
+        <if test="page.start!=null and page.count!=null">
+            limit #{page.start},#{page.count}
+        </if>
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from blog_comment
+    </select>
+
+    <select id="totalByArticleId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from blog_comment where article_id=#{article_id}
+    </select>
+
+    <insert id="addComment" parameterType="BlogComment">
+        insert into blog_comment (content, user_name, url, date_publish, article_id, pid)
+        values(#{content}, #{user_name}, #{url}, #{date_publish}, #{article_id}, #{pid})
+    </insert>
+
+    <update id="update" parameterType="BlogComment">
+        update blog_comment set
+        content=#{content}, user_name=#{user_name}, url=#{url}, date_publish=#{date_publish}, article_id=#{article_id}, pid=#{pid}
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from blog_comment where id=#{id}
+    </delete>
+</mapper>

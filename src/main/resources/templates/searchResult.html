@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="|搜索结果-${key}|"></title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        body {
+            background: #f5f8f9;
+        }
+        #box {
+            width: 1200px;
+            margin: 20px calc(50% - 600px);
+        }
+        #page {
+            width: 300px;
+            position: relative;
+            left: calc(50% - 150px);
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/include/head::head"></div>
+<div id="box">
+    <canvas id="mycanvas" width="1900" height="1080" style="position: absolute;z-index: -1;top:60px;left: 0px;"></canvas>
+    <nav th:unless="${#lists.isEmpty(results)}" id="page">
+        <ul class="pagination">
+            <li><a th:href="@{/search(key=${key},start=0)}"><<</a></li>
+            <li><a th:href="@{/search(key=${key},start=${page.start-page.count})}"><</a></li>
+            <li><a th:if="${page.start/page.count >= 1}" th:href="@{/search(key=${key},start=${page.start-page.count})}" th:text="${page.start/page.count}"></a></a></li>
+            <li><a th:href="@{/search(key=${key},start=${page.start})}" th:text="${page.start/page.count+1}" style="background-color: rgb(190,190,190);"></a></li>
+            <li><a th:if="${page.start < page.last}" th:href="@{/search(key=${key},start=${page.start+page.count})}" th:text="${page.start/page.count+2}"></a></a></li>
+            <li><a th:href="@{/search(key=${key},start=${page.start+page.count})}">></a></li>
+            <li><a th:href="@{/search(key=${key},start=${page.last})}">>></a></li>
+        </ul>
+    </nav>
+    <div id="articleInfo-list">
+        <span th:unless="${#lists.isEmpty(results)}">
+            <div th:each="r: ${results}">
+                <div th:replace="/include/box::searchResult(${r})"></div>
+            </div>
+        </span>
+        <span th:if="${#lists.isEmpty(results)}">
+            <div th:replace="/include/box::noResult(${key})"></div>
+        </span>
+    </div>
+</div>
+<script>
+    $(function () {
+        var rgb = getData("navbarColor");
+        var fontColor = getData("fontColor");
+        $('#navBar').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $('#bottom-info').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $(".navbar-a").each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+
+        var key = $('#searchKey').html();
+        $('#searchText').val(key);
+        $('.result-text').each(function () {
+            var text = $(this).html();
+            // var index = text.indexOf(key);
+            // var start = text.substr(0, index);
+            // var end = text.substr(index+key.length, text.length-1);
+            // var newText = start+ "<span style='color: red;font-weight: bold'>" + key + "</span>" + end;
+            var newText = stressKey(text, key);
+            $(this).html(newText);
+        });
+
+        if ($('#articleInfo-list').height()<900) {
+            $('#articleInfo-list').css("height", "770px");
+        }
+    })
+    
+    function stressKey(text, key) {
+        var index = text.indexOf(key);
+        if (index == -1) {
+            return text;
+        }
+        var start = text.substr(0, index);
+        var end = text.substr(index+key.length, text.length-1);
+        var newText = start + "<span style='color: red;font-weight: bold'>" + key + "</span>" + stressKey(end, key);
+        return newText
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/background.js}"></script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<footer th:fragment="articleTable(articles)">
+    <style>
+        #articleTable {
+            width: 100%;
+            text-align: center;
+            border-spacing: 0px 10px;
+        }
+    </style>
+    <table id="articleTable" class="table">
+        <tr style="height: 40px">
+            <th width="13%" style="text-align: center;">标题</th>
+            <th width="7%" style="text-align: center;">是否公开</th>
+            <th width="40%" style="text-align: center;">简介</th>
+            <th width="20%" style="text-align: center;">最后修改时间</th>
+            <th colspan="2" width="10%" style="text-align: center;">操作</th>
+        </tr>
+        <tr th:each="article : ${articles}" style="height: 60px;">
+            <td th:text="${article.title}"></td>
+            <td th:text="${article.is_public}?'是':'否'"></td>
+            <td th:text="${article.desc_text}" style="text-align: left;">&nbsp;</td>
+            <td th:text="${#dates.format(article.date_publish,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <form th:action="@{/updateEdit(id=${article.id})}" method="post">
+                    <button type="submit" class="btn btn-sm">修改</button>
+                </form>
+            </td>
+            <td>
+                <form action="/deleteArticle">
+                    <button type="submit" class="btn btn-sm" name="id" th:value="${article.id}">删除</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<footer th:fragment="commentTable(comments)">
+    <style>
+        #commentTable {
+            width: 100%;
+            text-align: center;
+            border-spacing: 0px 10px;
+        }
+    </style>
+    <table id="commentTable" class="table">
+        <tr style="height: 40px">
+            <th width="10%" style="text-align: center;">回复人</th>
+            <th width="15%" style="text-align: center;">日志名</th>
+            <th width="35%" style="text-align: center;">评论内容</th>
+            <th width="30%" style="text-align: center;">发布时间</th>
+            <th width="10%" style="text-align: center;">操作</th>
+        </tr>
+        <tr th:each="comment : ${comments}" style="height: 60px;">
+            <span th:if="${comment.url==''}">
+                <td th:text="${comment.user_name}"></td>
+            </span>
+            <span th:if="${comment.url!=''}">
+                <td>
+                    <a th:href="@{${comment.url}}">
+                        <span th:text="${comment.user_name}"></span>
+                    </a>
+                </td>
+            </span>
+            <td th:text="${comment.article_name}"></td>
+            <td th:text="${comment.content}"></td>
+            <td th:text="${#dates.format(comment.date_publish,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <form action="/deleteComment">
+                    <button type="submit" class="btn btn-sm" name="id" th:value="${comment.id}">删除</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</footer>
+
+<footer th:fragment="draftTable(drafts)">
+    <style>
+        #draftTable {
+            width: 100%;
+            text-align: center;
+            border-spacing: 0px 10px;
+        }
+    </style>
+    <table id="draftTable" class="table">
+        <tr style="height: 40px">
+            <th width="20%" style="text-align: center;">标题</th>
+            <th width="40%" style="text-align: center;">简介</th>
+            <th width="20%" style="text-align: center;">最后修改时间</th>
+            <th colspan="2" width="10%" style="text-align: center;">操作</th>
+        </tr>
+        <tr th:each="draft : ${drafts}" style="height: 60px;">
+            <td th:text="${draft.title}"></td>
+            <td th:text="${draft.desc_text}" style="text-align: left;">&nbsp;</td>
+            <td th:text="${#dates.format(draft.date_publish,'yyyy-MM-dd HH:mm:ss')}"></td>
+            <td>
+                <form th:action="@{/updateEdit(id=${draft.id})}" method="post">
+                    <button type="submit" class="btn btn-sm">修改</button>
+                </form>
+            </td>
+            <td>
+                <form action="/deleteArticle">
+                    <button type="submit" class="btn btn-sm" name="id" th:value="${draft.id}">删除</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</footer>
+</body>
+</html>

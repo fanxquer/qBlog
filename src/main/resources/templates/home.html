@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Hello, Im fanxquer</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        body {
+            background: #f5f8f9;
+        }
+        #box {
+            width: 1200px;
+            margin: 20px calc(50% - 600px);
+        }
+        /*#mycanvas {*/
+            /*top: 0px;*/
+            /*left: 0px;*/
+            /*width: 1200px;*/
+            /*height: 800px;*/
+            /*!*position: absolute;*!*/
+            /*!*z-index: -1;*!*/
+        /*}*/
+        #box div {
+            /*border: 1px solid*/
+        }
+        #r-list {
+            width: 100%;
+        }
+        #articleInfo-list {
+            padding: 10px 80px;
+        }
+        #articleInfo-list div.articleInfo-div {
+            float: left;
+        }
+        #article-left {
+            width: 300px;
+            float: left;
+        }
+        #article-right {
+            float: left;
+            margin-left: 100px;
+            width: 300px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/include/head::head"></div>
+<div id="box">
+    <canvas id="mycanvas" width="1900" height="1080" style="position: absolute;z-index: -1;top:60px;left: 0px;"></canvas>
+    <div class="col-md-9" id="articleInfo-list">
+        <div id="article-left">
+            <div th:each="blogArticle: ${blogArticles1}" class="articleInfo-div">
+                <div th:replace="/include/box::articleInfo2(${blogArticle})"></div>
+            </div>
+        </div>
+        <div id="article-right">
+            <div th:each="blogArticle: ${blogArticles2}" class="articleInfo-div">
+                <div th:replace="/include/box::articleInfo2(${blogArticle})"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="r-list">
+            <div th:replace="/include/box::userInfo"></div>
+            <div th:replace="/include/box::category(${categories})"></div>
+            <div th:replace="/include/box::setStyle"></div>
+        </div>
+    </div>
+</div>
+<div th:replace="/include/box::bottomInfo"></div>
+<script>
+    $(function () {
+        if (localStorage["list"] != null) {
+            var list = getData("list");
+            var rgb = getData("navbarColor");
+            var fontColor = getData("fontColor");
+            $(".color-block").each(function () {
+                var height = Math.floor(Math.random()*150 + 200);
+                var rgb = getOne(list);
+                $(this).animate({
+                    backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")",
+                    height:height,
+                    color:fontColor
+                }, 1000);
+            })
+
+            $('.article-info').each(function () {
+                $(this).animate({
+                    color: fontColor
+                }, 1000);
+            });
+
+            $('#navBar').animate({
+                backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+            }, 1000);
+            $('#bottom-info').animate({
+                backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+            }, 1000);
+            $(".navbar-a").each(function () {
+                $(this).animate({
+                    color: fontColor
+                }, 1000);
+            });
+        }
+    })
+
+    function getRandomColor() {
+        var rgb = new Array(3);
+        rgb[0] = Math.floor(Math.random()*255);
+        rgb[1] = Math.floor(Math.random()*255);
+        rgb[2] = Math.floor(Math.random()*255);
+        return rgb;
+    }
+    function getMax(array) {
+        return Math.max.apply(null, array);
+    }
+    function getMin(array) {
+        return Math.min.apply(null, array);
+    }
+    function getAvg(array) {
+        var sum = array[0]+array[1]+array[2];
+        return sum/3;
+    }
+    function submitStyle() {
+        var color = getRandomColor();
+        var interval = setInterval(function () {
+            if (color == "white") {
+                color = "black";
+            } else {
+                color = "white"
+            }
+            $('#style-button').animate({
+                color: color
+            }, 1000);
+        }, 1000)
+        var key = $('#submitStyle').val();
+        var url = "/submitStyle"
+        $.ajax({
+            url: url,
+            data:{"key": key},
+            success: function(result){
+                if (result.code == 1) {
+                    setStyle(result.list);
+                    saveData("list", result.list)
+                    clearInterval(interval);
+                    setTimeout("$('#style-button').css('color', 'black')", 1000);
+                }
+            }
+        })
+    }
+    function setStyle(list) {
+        var rgb = getOne(list);
+        var fontColor;
+        if (getAvg(rgb) > 170) {
+            fontColor = 'black';
+        } else {
+            fontColor = 'white';
+        }
+        $(".color-block").each(function () {
+            var height = Math.floor(Math.random()*150 + 200);
+            var rgb = getOne(list);
+            $(this).animate({
+                backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")",
+                height:height,
+                color:fontColor
+            }, 1000);
+        });
+
+        $('.article-info').each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+        saveData("navbarColor", rgb);
+        saveData("fontColor", fontColor);
+        $('#navBar').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $('#bottom-info').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $(".navbar-a").each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+    }
+</script>
+<script type="text/javascript" th:src="@{/js/background.js}"></script>
+</body>
+</html>

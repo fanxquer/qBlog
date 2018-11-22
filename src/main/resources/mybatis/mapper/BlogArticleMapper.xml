@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.fanxquer.qblog.dao.BlogArticleMapper">
+    <!-- 接口具体实现-->
+    <select id="getAll" resultType="BlogArticle">
+        select * from blog_article
+        <if test="start!=null and count!=null">
+          limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="getPublicArticles" resultType="BlogArticle">
+        select * from blog_article where is_public=true order by date_publish desc
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="getArticlesNotDraft" resultType="BlogArticle">
+        select * from blog_article where is_draft=false
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="getDrafts" resultType="BlogArticle">
+        select * from blog_article where is_draft=true
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="total" resultType="java.lang.Integer">
+        select count(*) from blog_article
+    </select>
+
+    <select id="totalPublic" resultType="java.lang.Integer">
+        select count(*) from blog_article where is_public=true
+    </select>
+
+    <select id="getById" parameterType="java.lang.Integer" resultType="BlogArticle">
+        select * from blog_article where id=#{id}
+    </select>
+
+    <select id="getArticleByUserName" resultType="BlogArticle">
+        select * from blog_article where user_name=#{user_name} and is_draft=false
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="getDraftByUserName" resultType="BlogArticle">
+        select * from blog_article where user_name=#{user_name} and is_draft=true
+        <if test="start!=null and count!=null">
+            limit #{start},#{count}
+        </if>
+    </select>
+
+    <select id="countByUserName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from blog_article where user_name=#{user_name};
+    </select>
+
+    <select id="countArticleByUserName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from blog_article where user_name=#{user_name} and is_draft=false;
+    </select>
+
+    <select id="countDraftByUserName" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from blog_article where user_name=#{user_name} and is_draft=true;
+    </select>
+
+    <select id="getByCategory" parameterType="java.lang.Integer" resultType="BlogArticle">
+        select * from blog_article where category=#{category}
+        <if test="page.start!=null and page.count!=null">
+            limit #{page.start},#{page.count}
+        </if>
+    </select>
+
+    <select id="searchByKey" parameterType="java.lang.String" resultType="BlogArticle">
+        select * from blog_article where content_md like CONCAT('%',#{key},'%') and is_public=true
+        <if test="page.start!=null and page.count!=null">
+            limit #{page.start},#{page.count}
+        </if>
+    </select>
+
+    <select id="totalSearch" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from blog_article where content_md like CONCAT('%',#{key},'%')
+    </select>
+
+    <select id="totalByCategory" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from blog_article where category=#{category}
+    </select>
+
+    <select id="totalNotDraft" resultType="java.lang.Integer">
+        select count(*) from blog_article where is_draft=false
+    </select>
+
+    <select id="totalDraft" resultType="java.lang.Integer">
+        select count(*) from blog_article where is_draft=true
+    </select>
+
+    <insert id="add" parameterType="BlogArticle">
+        insert into blog_article (user_name, title, desc_text, content_md, content_html, category, date_publish, click_count, is_draft, is_public)
+        values (#{user_name}, #{title}, #{desc_text}, #{content_md}, #{content_html}, #{category}, #{date_publish}, #{click_count}, #{is_draft}, #{is_public});
+    </insert>
+
+    <select id="countByCategory" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select count(*) from blog_article where category=#{category} and is_public=true and is_draft=false
+    </select>
+
+    <update id="update" parameterType="BlogArticle">
+        update blog_article set
+        user_name=#{user_name}, title=#{title}, desc_text=#{desc_text}, content_md=#{content_md}, content_html=#{content_html}, category=#{category}, date_publish=#{date_publish}, click_count=#{click_count}, is_draft=#{is_draft}, is_public=#{is_public}
+        where id=#{id}
+    </update>
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        delete from blog_article where id=#{id}
+    </delete>
+
+    <update id="addClick" parameterType="java.lang.Integer">
+        update blog_article set click_count=click_count+1 where id=#{id}
+    </update>
+</mapper>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>关于本站</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        body {
+            background: #f5f8f9;
+        }
+        #box {
+            width: 800px;
+            margin: 20px calc(50% - 400px);
+        }
+        #page {
+            background: ghostwhite;
+            border: 1px ghostwhite solid;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            padding: 30px 80px;
+            height: 800px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/include/head::head"></div>
+<div id="box">
+    <canvas id="mycanvas" width="1900" height="1080" style="position: absolute;z-index: -1;top:60px;left: 0px;"></canvas>
+    <div class="col-md-12" id="articleInfo-list">
+        <div th:utext="${about.content_html}" id="page">
+        </div>
+    </div>
+</div>
+<div th:replace="/include/box::bottomInfo"></div>
+</body>
+<script>
+    $(function () {
+        var rgb = getData("navbarColor");
+        var fontColor = getData("fontColor");
+        $('#navBar').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $('#bottom-info').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $(".navbar-a").each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+    })
+</script>
+<script type="text/javascript" th:src="@{/js/background.js}"></script>
+</html>

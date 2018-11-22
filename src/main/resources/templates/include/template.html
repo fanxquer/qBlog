@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/html">
+    <th:block th:fragment="bootstrap">
+        <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}" crossorigin="anonymous">
+
+        <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
+        <link rel="stylesheet" th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap-theme.min.css}" crossorigin="anonymous">
+
+        <script th:src="@{/webjars/jquery/1.11.1/jquery.min.js}" crossorigin="anonymous"></script>
+        <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+        <script th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}" crossorigin="anonymous"></script>
+        <script th:src="@{/webjars/jquery-ui/1.12.1/jquery-ui.min.js}"></script>
+    </th:block>
+    <th:block th:fragment="editormd">
+        <link rel="stylesheet" th:href="@{/webjars/editor.md/css/editormd.css}"/>
+        <script th:src="@{/webjars/editor.md/editormd.js}"></script>
+    </th:block>
+</html>

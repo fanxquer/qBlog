@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>登录</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        #hasUser {
+            font-size: 13px;
+            line-height: 30px;
+        }
+
+        div.row {
+            margin: 10px 0px;
+        }
+
+        div.container {
+            float: left;
+            width: 600px;
+        }
+
+        div.col-xs-2 {
+            font-size: 13px;
+            line-height: 30px;
+        }
+        div.panel {
+            width: 600px;
+            height: 250px;
+            position: absolute;
+            top: calc(50% - 200px);
+            left: calc(50% - 300px);
+            border: 0px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        div.panel-heading {
+            text-align: center;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+<div class="panel panel-info">
+    <div class="panel-heading" style="background: #31374e;">
+        <span style="color:cornsilk">博客后台-登录</span>
+    </div>
+    <div class="panel-body">
+        <form action="/login">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-2">用户名</div>
+                    <div class="col-xs-8">
+                        <input type="text" th:value="${user != null}?${user.name}:''" class="form-control" name="name" id="userName">
+                    </div>
+                    <div class="col-xs-2">
+                        <span class="" id="hasUser"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-2">密码</div>
+                    <div class="col-xs-8">
+                        <input type="password" value="" class="form-control" name="password">
+                    </div>
+                    <div th:if="${result == 'false'}" class="col-xs-2">
+                        <span class="glyphicon glyphicon-remove text-danger" id="isTrue">密码错误</span>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xs-5"></div>
+                    <div class="col-xs-2">
+                        <input type="submit" id="login" class="btn" value="登录">
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+<script>
+    $(function () {
+        $('#userName').on('input propertychange', function () {
+            if ($('#userName').val() != ""){
+                var url = "/hasUser";
+                var name = $('#userName').val();
+                $.ajax({
+                    url: url,
+                    data:{"name":name},
+                    success: function(result){
+                        if (result == 1) {
+                            $('#hasUser').attr('class', 'glyphicon glyphicon-ok text-success');
+                            $('#hasUser').html("");
+                        }
+                        else {
+                            $('#hasUser').attr('class', 'glyphicon glyphicon-asterisk text-danger');
+                            $('#hasUser').html("无效用户");
+                        }
+                    }
+                });
+            }
+            else {
+                $('#hasUser').attr("class", "");
+                $('#hasUser').html("");
+            }
+        })
+    })
+</script>
+</html>

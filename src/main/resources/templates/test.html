@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <link rel="stylesheet" th:href="@{/webjars/editor.md/css/editormd.css}"/>
+    <!--<link rel="shortcut icon" href="https://pandao.github.io/editor.md/favicon.ico" type="image/x-icon"/>-->
+    <script th:src="@{/webjars/editor.md/editormd.js}"></script>
+    <style>
+        #box {
+            width: 1200px;
+            position: absolute;
+            left: calc(50% - 600px);
+            top: 50px;
+            border: 1px solid;
+        }
+        .div {
+            background: #9d9d9d;
+            width: 20px;
+            border: 1px solid;
+            height: 100px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+<div id="box">
+    <canvas id="mycanvas" width="1200" height="800"></canvas>
+</div>
+<form action="/testStyle" style="width: 300px;">
+    <div class="form-group">
+        <input type="text" class="form-control" name="key" style="width: 200px">
+        <button type="submit" class="btn">获取</button>
+    </div>
+</form>
+<!--<div class="dropup">-->
+    <!--<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+        <!--Dropup-->
+        <!--<span class="caret"></span>-->
+    <!--</button>-->
+    <!--<ul class="dropdown-menu" aria-labelledby="dropdownMenu2">-->
+        <!--<li><a href="#">Action</a></li>-->
+        <!--<li><a href="#">Another action</a></li>-->
+        <!--<li><a href="#">Something else here</a></li>-->
+        <!--<li role="separator" class="divider"></li>-->
+        <!--<li><a href="#">Separated link</a></li>-->
+    <!--</ul>-->
+<!--</div>-->
+<!--<div class="form-group" style="width: 200px">-->
+    <!--<select class="form-control">-->
+        <!--<option>1</option>-->
+        <!--<option selected>2</option>-->
+        <!--<option>3</option>-->
+        <!--<option>4</option>-->
+        <!--<option>5</option>-->
+    <!--</select>-->
+<!--</div>-->
+<!--<div class="editormd" id="test-editormd" style="z-index: 1">-->
+    <!--<textarea class="editormd-markdown-textarea" name="test-editormd-markdown-doc">${article.content_md}</textarea>-->
+    <!--&lt;!&ndash; 第二个隐藏文本域，用来构造生成的HTML代码，方便表单POST提交，这里的name可以任意取，后台接受时以这个name键为准 &ndash;&gt;-->
+    <!--<textarea class="editormd-html-textarea" name="content_html"></textarea>-->
+<!--</div>-->
+<script>
+    // $(function () {
+    //     editormd("test-editormd", {
+    //         width   : "90%",
+    //         height  : 640,
+    //         syncScrolling : "single",
+    //         //你的lib目录的路径，我这边用JSP做测试的
+    //         path    : "/webjars/editor.md/lib/",
+    //         //这个配置在simple.html中并没有，但是为了能够提交表单，使用这个配置可以让构造出来的HTML代码直接在第二个隐藏的textarea域中，方便post提交表单。
+    //         // imageUpload : true,
+    //         // imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+    //         // imageUploadURL : "/uploadFile",
+    //         saveHTMLToTextarea : true,
+    //     });
+    // })
+    var mycanvas = document.getElementById("mycanvas");
+    var ctx = mycanvas.getContext("2d");
+    // $(function () {
+    //     // $(".div").each(function () {
+    //     //     var height = 2;
+    //     //     for (var i = 0;i < 9;i++) {
+    //     //         height = height*2;
+    //     //         $(this).animate({
+    //     //             top: height+"px"
+    //     //         }, 50);
+    //     //     }
+    //     // })
+    //     var x = 400,y = 0,t = 1;
+    //     var rect = setInterval(function () {
+    //         var x = Math.floor(Math.random()*1200);
+    //         var y = Math.floor(Math.random()*800);
+    //         c2(x, y, getRandomColor());
+    //         // ctx.clearRect(0,0,1200,800);
+    //         // ctx.fillRect(x, y, 20, 60);
+    //         // ctx.fillText("I", x, y);
+    //         // if (y >= 800) {
+    //         //     clearInterval(rect);
+    //         //     c2(400, 500);
+    //         // }
+    //         // t += 0.5
+    //         // y = 0.5*9.8*t*t;
+    //     }, 500);
+    // })
+
+    function getRandomColor() {
+        var rgb = new Array(3);
+        rgb[0] = Math.floor(Math.random()*255);
+        rgb[1] = Math.floor(Math.random()*255);
+        rgb[2] = Math.floor(Math.random()*255);
+        return rgb;
+    }
+    function getRads (degrees) { return (Math.PI * degrees) / 180; }
+
+
+    function c(x) {
+        var r = 1,angle = 0.1;
+        var r2 = 1,angle2 = 0.1;
+        var r3 = 1;
+        var outc = setInterval(function () {
+            ctx.beginPath();
+            ctx.arc(x+10, 800, r, 0, -Math.PI, true);
+            ctx.fillStyle = "rgb(123,123,123)";
+            ctx.fill();
+            r += Math.abs(1/angle)*5;
+            angle -= 0.6;
+            if (r >= 65) {
+                ctx.beginPath();
+                ctx.arc(x+10, 800, r2, 0, -Math.PI, true);
+                ctx.fillStyle = "rgb(255,255,255)";
+                ctx.fill();
+                r2 += Math.abs(1/angle2)*5;
+                angle2 -= 0.6;
+            }
+            if (r >= 95) {
+                ctx.beginPath();
+                ctx.arc(x-80, 800-80, r3, 0, Math.PI*2, true);
+                ctx.fillStyle = "rgb(255,255,255)";
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(x-10, 800-80, r3, 0, Math.PI*2, true);
+                ctx.fillStyle = "rgb(255,255,255)";
+                ctx.fill();
+
+                ctx.beginPath();
+                ctx.arc(x+90, 800-60, r3, 0, Math.PI*2, true);
+                ctx.fillStyle = "rgb(255,255,255)";
+                ctx.fill();
+                r3 += 2;
+            }
+            if (r2 >= 100) {
+                clearInterval(outc);
+            }
+        }, 20);
+    }
+
+    function c2(x,y,rgb) {
+        var r = 1,angle = -0.1;
+        var r2 = 1,angle2 = -0.1;
+        var a1s = 45,a1e = 45;
+        var a2s = 180,a2e = 180;
+        var a3s = 270,a3e = 270;
+        var outc = setInterval(function () {
+            ctx.beginPath();
+            ctx.arc(x+10, y, r, 0, Math.PI*2, true);
+            ctx.fillStyle = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2];
+            ctx.fill();
+            r += Math.abs(1/angle)*5;
+            angle -= 0.6;
+            if (r >= 65) {
+                ctx.beginPath();
+                ctx.arc(x+10, y, r2, 0, Math.PI*2, true);
+                ctx.fillStyle = "rgb(255,255,255)";
+                ctx.fill();
+                r2 += Math.abs(1/angle2)*5;
+                angle2 -= 0.6;
+            }
+            if (r >= 93) {
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.strokeStyle = "rgb(255,255,255)";
+                ctx.arc(x+10, y, r, getRads(a1s--), getRads(a1e++), false);
+                ctx.stroke();
+                // ctx.fillStyle = "rgb(255,255,255)";
+                // ctx.fill();
+
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.strokeStyle = "rgb(255,255,255)";
+                ctx.arc(x+10, y, r, getRads(a2s--), getRads(a2e++), false);
+                ctx.stroke();
+                // ctx.fillStyle = "rgb(255,255,255)";
+                // ctx.fill();
+
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.strokeStyle = "rgb(255,255,255)";
+                ctx.arc(x+10, y, r, getRads(a3s--), getRads(a3e++), false);
+                ctx.stroke();
+                // ctx.fillStyle = "rgb(255,255,255)";
+                // ctx.fill();
+            }
+            if (r >= 100) {
+                clearInterval(outc);
+            }
+        }, 20);
+    }
+
+    //圆形类
+    function Circle(x,y,color){
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.r1 = 1;
+        this.r2 = 1;
+        this.a1 = -0.1;
+        this.a2 = -0.1;
+        this.a1s = 45;
+        this.a2s = 180;
+        this.a3s = 270;
+        this.a1e = 45;
+        this.a2e = 180;
+        this.a3e = 270;
+
+        //往数组中push自己
+        circleArr.push(this);
+    }
+
+    //渲染
+    Circle.prototype.render = function(){
+        //新建一条路径
+        ctx.beginPath();
+        //创建一个圆
+        ctx.arc(this.x, this.y, this.r1, 0, Math.PI*2, true);
+        //设置样式颜色
+        ctx.fillStyle = this.color;
+        //通过填充路径的内容区域生成实心的图形
+        ctx.fill();
+        if (this.r1 >= 65) {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r2, 0, Math.PI*2, true);
+            ctx.fillStyle = "rgb(255,255,255)";
+            ctx.fill();
+        }
+        if (this.r1 >= 93) {
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.strokeStyle = "rgb(255,255,255)";
+            ctx.arc(this.x, this.y, this.r1, getRads(this.a1s--), getRads(this.a1e++), false);
+            ctx.stroke();
+
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.strokeStyle = "rgb(255,255,255)";
+            ctx.arc(this.x, this.y, this.r1, getRads(this.a2s--), getRads(this.a2e++), false);
+            ctx.stroke();
+
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.strokeStyle = "rgb(255,255,255)";
+            ctx.arc(this.x, this.y, this.r1, getRads(this.a3s--), getRads(this.a3e++), false);
+            ctx.stroke();
+        }
+    }
+
+    //更新
+    Circle.prototype.update = function(){
+        this.r1 += Math.abs(1/this.a1)*5;
+        if (this.r1 >= 65) {
+            this.r2 += Math.abs(1/this.a2)*5;
+        }
+        this.a1 -= 0.6;
+        if(this.r1 >= 65) {
+            this.a2 -= 0.6;
+        }
+        if(this.r1 >= 100){
+            for (var i = 0; i < circleArr.length; i++) {
+                if (circleArr[i] === this) {
+                    circleArr.splice(i,1);
+                };
+            }
+            return false;
+        }
+        return true;
+    }
+    //创建一个数组
+    var circleArr = [];
+
+    //鼠标移动事件
+    setInterval(function () {
+        var x = Math.floor(Math.random()*1200);
+        var y = Math.floor(Math.random()*800);
+        var rgb = getRandomColor();
+        var color = "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")";
+        new Circle(x,y,color);
+    }, 300)
+
+    //设置定时器每20毫秒更新和渲染
+    setInterval(function(){
+        ctx.clearRect(0, 0, 1000, 600)
+        for (var i = 0; i < circleArr.length; i++) {
+            circleArr[i].update() ;
+            circleArr[i].render();
+        };
+    },20);
+
+
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>文章详情</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        body {
+            background: #f5f8f9;
+        }
+        #box {
+            width: 1200px;
+            margin: 20px calc(50% - 600px);
+        }
+        #box div {
+            /*border: 1px solid*/
+        }
+        #r-list {
+            width: 100%;
+        }
+        #articleInfo-list {
+            padding: 10px 30px;
+        }
+        #page {
+            background: ghostwhite;
+            border: 1px ghostwhite solid;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        #content-html {
+            width: 100%;
+            margin: 10px 20px;
+        }
+        #comment {
+            width: 100%;
+            background: ghostwhite;
+            border: 1px ghostwhite solid;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-top: 30px;
+        }
+        #comment-title {
+            width: 800px;
+            line-height: 40px;
+            font-size: 25px;
+            border-left: 4px solid darkred;
+        }
+        #goTop {
+            height: 40px;
+            width: 40px;
+            position: fixed;
+            right: 15%;
+            bottom: 150px;
+            background: #cdcdcd;
+            opacity: 0.5;
+        }
+        .comment-input {
+            width: 758px;
+            font-size: 16px;
+            margin: 15px 20px;
+            padding-bottom: 50px;
+            border-bottom: 1px #95958a dashed;
+        }
+        .comment-div {
+            width: 798px;
+            background: ghostwhite;
+            margin: 30px 0px;
+            padding: 20px 0px;
+            box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+        }
+        .well {
+            width: 758px;
+            background: hsla(0,0%,71%,.1);
+            margin: 15px 20px;
+        }
+        .comment-content {
+            width: 758px;
+            margin: 15px 20px;
+        }
+        .comment-desc {
+            width: 798px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/include/head::head"></div>
+<div id="box">
+    <canvas id="mycanvas" width="1900" height="1080" style="position: absolute;z-index: -1;top:60px;left: 0px;"></canvas>
+    <div class="col-md-9" id="articleInfo-list">
+        <div id="page">
+            <div id="content-html" th:utext="${blogArticle.content_html}" style="width: 760px;">
+            </div>
+        </div>
+        <div id="comment">
+            <div id="comment-title">&nbsp;评论</div>
+            <span th:text="${blogArticle.id}" hidden="hidden" id="blogArticle-id"></span>
+            <div class="comment-input">
+                发表您的看法<br>
+                <textarea class="bitian form-control" style="height: 100px" id="submit-content" placeholder="必填"></textarea><br>
+                您的个人网站<br>
+                <input type="text" class="form-control" style="width: 300px;" id="submit-url" /><br>
+                您的称呼<br>
+                <input type="text" class="bitian form-control" style="width: 200px;" id="submit-user_name" placeholder="必填"/><br>
+                <button type="submit" class="btn btn-default disabled" style="width: 100px;float: right;" id="submitComment">发表</button>
+            </div>
+            <div id="comment-div">
+                <div th:each="comment: ${comments}" class="comment-div">
+                    <span th:text="|#${comment.id}|" style="margin-left: 10px"></span>
+                    <span th:if="${comment.url==''}">
+                        <span th:text="${comment.user_name}" style="font-weight: bold;"></span>
+                    </span>
+                    <span th:if="${comment.url!=''}">
+                        <a th:href="@{${comment.url}}" style="font-weight: bold">
+                            <span th:text="${comment.user_name}"></span>
+                        </a>
+                    </span>
+                    :<br>
+                    <span th:if="${comment.pid != 0}">
+                        <span th:if="${comment.pid==-1}">
+                            <div class="well">
+                                该评论已被删除
+                            </div>
+                        </span>
+                        <span th:each="commentp: ${comments}">
+                            <span th:if="${commentp.id==comment.pid}">
+                                <div class="well">
+                                    <span th:text="|@${commentp.user_name}|" style="font-weight: bold"></span>:<br>
+                                    <span th:utext="${commentp.content}"></span>
+                                </div>
+                            </span>
+                        </span>
+                    </span>
+                    <div th:utext="${comment.content}" class="comment-content">
+                    </div>
+                    <div class="comment-desc">
+                        <span th:text="${#dates.format(comment.date_publish,'yyyy-MM-dd HH:mm:ss')}" style="margin-left: 10px"></span>
+                        <span style="float:right;margin-right: 10px">
+                            <a>回复<span th:text="${comment.id}" hidden="hidden"></span></a>&nbsp;
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <nav>
+                <ul class="pager">
+                    <li class="previous">
+                        <a th:href="@{${url}(start=${page.start-page.count},id=${blogArticle.id})}">
+                            <span aria-hidden="true">&larr;</span> 上一页
+                        </a>
+                    </li>
+                    <li class="next">
+                        <a th:href="@{${url}(start=${page.start+page.count},id=${blogArticle.id})}">
+                            下一页 <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="r-list">
+            <div th:replace="/include/box::userInfo"></div>
+            <div th:replace="/include/box::category(${categories})"></div>
+        </div>
+    </div>
+</div>
+<a class="btn" id="goTop"><span class="glyphicon glyphicon-chevron-up" style="line-height: 20px"></span></a>
+<div th:replace="/include/box::bottomInfo"></div>
+</body>
+<script>
+    $(function () {
+        var rgb = getData("navbarColor");
+        var fontColor = getData("fontColor");
+        $('#navBar').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $('#bottom-info').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $(".navbar-a").each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+
+        $('.bitian').blur(function () {
+            if ($('#submit-content').val() != "" && $('#submit-user_name').val() != "") {
+                $('#submitComment').attr("class", "btn btn-default");
+            }
+            else{
+                $('#submitComment').attr("class", "btn btn-default disabled");
+            }
+        })
+        $('.comment-desc a').click(function () {
+            scrollTo('#comment', 300);
+            $('#submit-content').val("<comment-id>"+$(this).children().html()+"</comment-id>");
+            $('#submit-content').focus();
+        })
+
+        $('#goTop').click(function () {
+            scrollTo();
+        })
+        $('#submitComment').click(function () {
+            var url = "/submitComment";
+            $.ajax({
+                url: url,
+                data:{"article_id":$('#blogArticle-id').html(), "content":$('#submit-content').val(), "url":$('#submit-url').val(), "user_name":$('#submit-user_name').val()},
+                success: function(result){
+                    if (result == 1) {
+                        $('.form-control').val('');
+                        $('#submitComment').attr("class", "btn btn-default disabled");
+                    }
+                }
+            });
+        })
+    })
+    function scrollTo(ele, speed){
+        if(!speed) speed = 300;
+        if(!ele){
+            $("html,body").animate({scrollTop:0},speed);
+        }else{
+            if(ele.length>0) $("html,body").animate({scrollTop:$(ele).offset().top},speed);
+        }
+        return false;
+    }
+    $('#goTop').click(function () {
+        scrollTo();
+    })
+</script>
+<script type="text/javascript" th:src="@{/js/background.js}"></script>
+</html>

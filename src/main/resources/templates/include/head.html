@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<footer th:fragment="head">
+    <style>
+        #navBar {
+            width: 100%;
+            height: 60px;
+            background: white;
+            box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        #navBar div.container div.row div a {
+            color: black;
+            line-height: 60px;
+            font-size: 15px;
+        }
+        #navBar div.container div.row div a:hover {
+            text-decoration: none;
+            color: #38b7ea;
+            font-weight: bold;
+            font-size: 17px;
+        }
+        #list {
+            width: 1200px;
+            position: relative;
+            left: calc(50% - 600px);
+            text-align: center;
+        }
+        #plate {
+            width: 600px;
+            height: 60px;
+            float: left;
+        }
+        #search {
+            width: 300px;
+            height: 40px;
+            float: right;
+            margin-top: 13px;
+        }
+    </style>
+    <div id="navBar">
+        <div id="list">
+            <div class="container" id="plate">
+                <div class="row">
+                    <div class="col-xs-3"><a href="/home" class="navbar-a">主页</a></div>
+                    <div class="col-xs-3"><a href="/listArticle" class="navbar-a">网络日志</a></div>
+                    <div class="col-xs-3"><a href="/about" class="navbar-a">关于</a></div>
+                </div>
+            </div>
+            <div id="search">
+                <div class="input-group">
+                    <input type="text" class="form-control" aria-label="..." id="searchText">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false">搜索<span class="caret"></span></button>
+                        <ul class="dropdown-menu dropdown-menu-right" role="menu">
+                            <li><a href="#" id="search-button">本站</a></li>
+                            <li class="divider"></li>
+                            <li><a href="#" id="baidu">Baidu</a></li>
+                            <li><a href="#" id="google">Google</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        $(function () {
+            $('#search-button').click(function () {
+                url =  "/search?key=" + $('#searchText').val();
+                $(location).attr('href', url);
+            })
+
+            $('#baidu').click(function () {
+                url =  "http://www.baidu.com/s?wd=" + $('#searchText').val();
+                $(location).attr('href', url);
+            })
+
+            $('#google').click(function () {
+                url =  "http://www.google.cn/search?q=" + $('#searchText').val();
+                $(location).attr('href', url);
+            })
+        })
+    </script>
+</footer>
+</body>
+</html>

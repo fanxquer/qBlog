@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>网络日志</title>
+    <head th:replace="include/template::bootstrap"></head>
+    <style>
+        body {
+            background: #f5f8f9;
+        }
+        #box {
+            width: 1200px;
+            margin: 20px calc(50% - 600px);
+        }
+        #box div {
+            /*border: 1px solid*/
+        }
+        #r-list {
+            width: 100%;
+        }
+        #articleInfo-list {
+            padding: 10px 30px;
+        }
+        #page {
+            background: ghostwhite;
+            border: 1px ghostwhite solid;
+            box-shadow: 0 5px 5px rgba(0, 0, 0, 0.1);
+            padding: 20px 20px;
+        }
+    </style>
+</head>
+<body>
+<div th:replace="/include/head::head"></div>
+<div id="box">
+    <!--背景-->
+    <canvas id="mycanvas" width="1900" height="1080" style="position: absolute;z-index: -1;top:60px;left: 0px;"></canvas>
+    <div class="col-md-9" id="articleInfo-list">
+        <div id="page">
+            <div th:each="blogArticle: ${blogArticles}" class="articleInfo-div">
+                <div th:replace="/include/box::articleInfo3(${blogArticle})"></div>
+            </div>
+            <nav>
+                <ul class="pager">
+                    <li class="previous">
+                        <a th:href="${categoryId!=null}?@{${url}(start=${page.start-page.count},category=${categoryId})}:@{${url}(start=${page.start-page.count})}">
+                            <span aria-hidden="true">&larr;</span> 上一页
+                        </a>
+                    </li>
+                    <li class="next">
+                        <a th:href="${categoryId!=null}?@{${url}(start=${page.start+page.count},category=${categoryId})}:@{${url}(start=${page.start+page.count})}">
+                            下一页 <span aria-hidden="true">&rarr;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div id="r-list">
+            <div th:replace="/include/box::userInfo"></div>
+            <div th:replace="/include/box::category(${categories})"></div>
+        </div>
+    </div>
+</div>
+<div th:replace="/include/box::bottomInfo"></div>
+<script>
+    $(function () {
+        var rgb = getData("navbarColor");
+        var fontColor = getData("fontColor");
+        $('#navBar').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $('#bottom-info').animate({
+            backgroundColor: "rgb("+rgb[0]+","+rgb[1]+","+rgb[2]+")"
+        }, 1000);
+        $(".navbar-a").each(function () {
+            $(this).animate({
+                color: fontColor
+            }, 1000);
+        });
+    })
+    // function toColor(rgb1,rgb2, e) {
+    //     var count = 1000/50;
+    //     var red = rgb1[0],green = rgb1[1],blue = rgb1[2];
+    //     var r = (rgb2[0]-rgb1[0])/count,g = (rgb2[1]-rgb1[1])/count,b = (rgb2[2]-rgb1[2])/count;
+    //     for(var i=1;i<count+1;i++){
+    //         console.log(i+"  "+r);
+    //         setTimeout(function() {
+    //             e.css("background", "rgb("+parseInt(red+r*i+0.5)+","+parseInt(green+g*i+0.5)+","+parseInt(blue+b*i+0.5)+")");
+    //             console.log(i+" "+(red+r*i));
+    //         }, i*50);
+    //     }
+    // }
+</script>
+<script type="text/javascript" th:src="@{/js/background.js}"></script>
+</body>
+</html>
