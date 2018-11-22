@@ -4,6 +4,7 @@ public class SearchResult {
     private int articleId;
     private String articleTitle;
     private String categoryName;
+    private String Desc;
     private String textPart;
     private String key;
 
@@ -29,6 +30,14 @@ public class SearchResult {
 
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
+    }
+
+    public String getDesc() {
+        return Desc;
+    }
+
+    public void setDesc(String desc) {
+        Desc = desc;
     }
 
     public String getTextPart() {

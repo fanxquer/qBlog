@@ -45,7 +45,7 @@ public class DaoTest {
     @Test
     public void search() {
         String key = "%java%";
-        List<BlogArticle> as = blogArticleMapper.searchByKey(key);
+        List<BlogArticle> as = blogArticleMapper.searchByContent(key);
         for (BlogArticle b: as) {
             System.out.println(b.getTitle());
         }

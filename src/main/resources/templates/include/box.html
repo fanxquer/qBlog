@@ -324,7 +324,7 @@
             </a>
         </div>
         <div class="text-part">
-            ...<span th:text="${result.textPart}" class="result-text"></span>...
+            ...<span th:utext="|<b>${result.Desc}</b><br>${result.textPart}|" class="result-text"></span>...
             <span th:text="${result.key}" hidden="hidden" id="searchKey"></span>
         </div>
     </div>

@@ -135,7 +135,7 @@ public class BlogArticleServiceImpl implements BlogArticleService {
 
     @Override
     public List<SearchResult> searchByKey(String key) {
-        List<BlogArticle> articles = blogArticleMapper.searchByKey(key);
+        List<BlogArticle> articles = blogArticleMapper.searchByContent(key);
         List<SearchResult> results = new ArrayList<>();
         for (BlogArticle a: articles) {
             SearchResult result = new SearchResult();
@@ -153,7 +153,11 @@ public class BlogArticleServiceImpl implements BlogArticleService {
 
     @Override
     public List<SearchResult> searchByKey(String key, Page page) {
-        List<BlogArticle> articles = blogArticleMapper.searchByKey(key, page);
+        List<BlogArticle> byTitle = blogArticleMapper.searchByTitle(key);
+        List<BlogArticle> byDesc = blogArticleMapper.searchByDesc(key);
+        List<BlogArticle> byContent = blogArticleMapper.searchByContent(key);
+        List<BlogArticle> articles = addArticelList(byTitle, byDesc);
+        articles = addArticelList(articles, byContent);
         List<SearchResult> results = new ArrayList<>();
         for (BlogArticle a: articles) {
             SearchResult result = new SearchResult();
@@ -162,10 +166,17 @@ public class BlogArticleServiceImpl implements BlogArticleService {
             result.setKey(key);
             Category category = categoryMapper.getById(a.getCategory());
             result.setCategoryName(category.getName());
+            result.setDesc(a.getDesc_text());
             result.setTextPart(getPartByKey(a.getContent_md(), key, 400));
 
             results.add(result);
         }
+        page.caculateLast(results.size());
+        int end = page.getStart()+page.getCount();
+        if (end+1 > results.size()) {
+            end = results.size();
+        }
+        results = results.subList(page.getStart(), end);
         return results;
     }
 
@@ -244,5 +255,22 @@ public class BlogArticleServiceImpl implements BlogArticleService {
         }
         System.out.println("start:"+start+" end:"+end);
         return text.substring(start, end);
+    }
+
+    public static List<BlogArticle> addArticelList(List<BlogArticle> list1, List<BlogArticle> list2) {
+        List<BlogArticle> list = list1;
+        for (int i = 0;i < list2.size();i++) {
+            boolean flag = true;
+            for (int j = 0;j < list1.size();j++) {
+                if (list2.get(i).getId() == list1.get(j).getId()) {
+                    flag = false;
+                }
+            }
+            if (flag) {
+                list.add(list2.get(i));
+            }
+        }
+
+        return list;
     }
 }

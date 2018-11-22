@@ -54,9 +54,11 @@ public interface BlogArticleMapper {
 
     public void addClick(int id);
 
-    public List<BlogArticle> searchByKey(String key);
+    public List<BlogArticle> searchByContent(String key);
 
-    public List<BlogArticle> searchByKey(@Param("key") String key, @Param("page") Page page);
+    public List<BlogArticle> searchByTitle(String key);
+
+    public List<BlogArticle> searchByDesc(String key);
 
     public int totalSearch(String key);
 

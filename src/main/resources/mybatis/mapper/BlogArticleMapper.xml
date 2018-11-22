@@ -77,11 +77,16 @@
         </if>
     </select>
 
-    <select id="searchByKey" parameterType="java.lang.String" resultType="BlogArticle">
+    <select id="searchByContent" parameterType="java.lang.String" resultType="BlogArticle">
         select * from blog_article where content_md like CONCAT('%',#{key},'%') and is_public=true
-        <if test="page.start!=null and page.count!=null">
-            limit #{page.start},#{page.count}
-        </if>
+    </select>
+
+    <select id="searchByTitle" parameterType="java.lang.String" resultType="BlogArticle">
+        select * from blog_article where title like CONCAT('%',#{key},'%') and is_public=true
+    </select>
+
+    <select id="searchByDesc" parameterType="java.lang.String" resultType="BlogArticle">
+        select * from blog_article where desc_text like CONCAT('%',#{key},'%') and is_public=true
     </select>
 
     <select id="totalSearch" parameterType="java.lang.String" resultType="java.lang.Integer">

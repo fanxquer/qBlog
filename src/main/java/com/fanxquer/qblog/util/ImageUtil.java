@@ -75,7 +75,7 @@ public class ImageUtil {
             //获取下一张图片
             BufferedImage bufferedImage = getNext();
             //如果获取获取成功，保存，get+1
-            if (bufferedImage != null) {
+            if (bufferedImage != null && bufferedImage.getWidth() != 0) {
                 BIs.add(cropImage(getThumbnail(bufferedImage)));
                 get++;
             }
@@ -97,10 +97,15 @@ public class ImageUtil {
                 HttpURLConnection httpCon =(HttpURLConnection) con;
                 InputStream in = httpCon.getInputStream();
                 BufferedImage bufferedImage = ImageIO.read(in);
+                if (bufferedImage == null || bufferedImage.getWidth() == 0) {
+                    next++;
+                    return null;
+                }
                 next++;
                 return bufferedImage;
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
+            System.out.println("超时");
             next++;
             return null;
         }
@@ -177,7 +182,8 @@ public class ImageUtil {
      */
     public int getHeight(BufferedImage bufferedImage) {
         System.out.println(bufferedImage == null? "BI is null": "");
-        int height = (int) (bufferedImage.getHeight()/(bufferedImage.getWidth()/width));
+        float x = bufferedImage.getWidth()/width;
+        int height = (int) (bufferedImage.getHeight()/x);
         return height;
     }
 

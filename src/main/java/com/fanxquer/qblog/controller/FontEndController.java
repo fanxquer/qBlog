@@ -187,8 +187,6 @@ public class FontEndController {
     public ModelAndView searchByKey(String key, Page page) {
         //设置每页数量
         page.setCount(8);
-        //计算最后页和越界处理
-        page.caculateLast(blogArticleService.totalSearch(key));
         ModelAndView mav = new ModelAndView("searchResult");
         List<SearchResult> results = blogArticleService.searchByKey(key, page);
         mav.addObject("results", results);
