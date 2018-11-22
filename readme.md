@@ -2,10 +2,15 @@
 - 特色
 通过关键词(任意关键词)改变界面风格
 ![](https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg)
-- 其他部分展示
-![](https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg)
-![](https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg)
-![](https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg)
+- 其他部分展示<br>
+　　日志列表：<br>
+![日志列表](https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg)
+　　评论：<br>
+![评论](https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg)
+　　后台：<br>
+![后台](https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg)
+- 相关技术<br>
+　　本项目主要使用springboot、mybatis、bootstrap开发框架，数据库为Mysql
 - 参考<br>
 　　[Java简单实现：爬取网页并且保存](http://www.cnblogs.com/ywl925/p/3270875.html)<br>
 　　[K-Means聚类算法（一）：算法思路](https://zhuanlan.zhihu.com/p/20432322)<br>
