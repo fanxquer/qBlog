@@ -1,16 +1,14 @@
 ﻿# qBlog
 - 特色
 通过关键词(任意关键词)改变界面风格
-<center>
-	<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%">
-</center>
+<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%" align=center>
 - 其他部分展示<br>
 　　日志列表：<br>
-![日志列表](https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg)
+<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/2.jpg" width="50%" align=center>
 　　评论：<br>
-![评论](https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg)
+<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/3.jpg" width="50%" align=center>
 　　后台：<br>
-![后台](https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg)
+<img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/4.jpg" width="50%" align=center>
 - 相关技术<br>
 　　本项目主要使用springboot、mybatis、bootstrap开发框架，数据库为Mysql
 - 参考<br>
