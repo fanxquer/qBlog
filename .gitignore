@@ -28,3 +28,5 @@
 *.less linguist-language=java
 *.js linguist-language=java
 *.html linguist-language=java
+*.java linguist-language=java
+*.xml linguist-language=java
