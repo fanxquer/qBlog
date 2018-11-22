@@ -1,4 +1,5 @@
 ﻿# qBlog
+## 简易博客系统
 #### 特色
 - 通过关键词(任意关键词)改变界面风格<br><img src="https://github.com/fanxquer/qBlog/blob/master/readmeImage/1.jpg" width="50%" align=center>
 #### 其他部分展示
